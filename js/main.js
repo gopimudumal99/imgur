@@ -134,12 +134,17 @@ let data = [
   },
 ];
 let main_div = document.getElementById("tags-div");
+import { showData1,calldata } from "../js/showdata.js";
 
 function showData(data) { 
     main_div.innerHTML = "";
-    data.forEach(el => {
-        const divEl = document.createElement("div")
-        divEl.classList.add("tags");
+    data.forEach((el) => {
+      const divEl = document.createElement("div")
+      divEl.classList.add("tags");
+      let { title } = el
+      divEl.addEventListener("click", (...title) => { 
+        datatags(...title);
+      })
                   divEl.innerHTML = `
                     <div class="tags">
                     <div class="tag-img">
@@ -168,3 +173,87 @@ more_tag_div.addEventListener("click", function () {
     }
 })
 
+let a
+let count 
+count = 2;
+export async function datatags(el) { 
+  a = arguments[0].path[2].innerText.split("\n")[0]
+  count = 2
+  await showData1(1,a)
+}
+
+// input box
+
+let right_div = document.querySelector(".right");
+let left_div = document.querySelector(".left");
+let num = document.getElementById("num");
+
+right_div.addEventListener("click", function () {
+  if (a != undefined) {
+    showData1(count, a);
+  } else {
+    showData1(count, "all");
+  }
+  num.innerText = count;
+  ++count;
+});
+
+left_div.addEventListener("click", function () {
+  if (count > 1) count = count - 1;
+  if (a != undefined) {
+    showData1(count, a);
+  } else { 
+        showData1(count, "all");
+  }
+  num.innerText = count;
+});
+
+const input_box = document.querySelector(".input-box")
+const input = document.getElementById("input-tag")
+// debounce 
+input.addEventListener("keypress", debounce(async (e) => {
+  console.log(input.value)
+  if (input.value.length >= 1) {
+    input_box.style.display = "block";
+    let div = document.createElement('div')
+    let d = await calldata(1, input.value)
+    d.forEach((el,i) => {
+      div.id = i
+      div.classList.add("input-elem")
+      div.innerText = el.tags
+      div.addEventListener("click", function (...args) { 
+        elemTagFun(...args);
+      })
+      input_box.appendChild(div)
+    })
+    if (div.innerText.length == 0) { 
+      div.innerText = "No Results";
+      input_box.appendChild(div);
+      setTimeout(() => { 
+        input_box.removeChild(div)
+      },2000)
+    }
+  } else { 
+    input_box.style.display = "hidden";
+  }
+},200))
+function debounce(fun, delay) { 
+  let timeId
+  return function (...agrs) { 
+    if (timeId) { 
+      clearTimeout(timeId)
+    }
+   timeId= setTimeout(() => { 
+      fun(...agrs)
+    },delay)
+  }
+}
+
+let body = document.querySelector("body")
+body.addEventListener("click", function () { 
+  console.log("fksd")
+})
+
+function elemTagFun(args) { 
+  console.log(arguments[0].path);
+}
