@@ -31,8 +31,9 @@
 
 .serch-div {
   display: flex;
+  /* border: 1px solid red; */
+  flex: 0.8;
   align-items: center;
-  min-width: 500px;
   position: relative;
   padding: 5px 9px;
   border-radius: 3px;
@@ -100,7 +101,8 @@
 
 .profile-log {
   border-radius: 50%;
-  width: 40px;
+  width: 30px;
+  margin-top:5px
 }
 
 /*  */
